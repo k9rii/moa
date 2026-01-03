@@ -1,87 +1,42 @@
-import { useState } from 'react';
-import { Home } from './components/Home';
-import { MemberDetail } from './components/MemberDetail';
-import { ItemDetail } from './components/ItemDetail';
-import { MyPage } from './components/MyPage';
-import { TopNav } from './components/TopNav';
+import { useState } from "react";
+import { Home } from "./components/Home";
+import { ItemDetail } from "./components/ItemDetail";
+import { MyPage } from "./components/MyPage";
+import { TopNav } from "./components/TopNav";
 
-type Page = 'home' | 'member' | 'item' | 'mypage';
+type Page = "home" | "item" | "mypage";
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<Page>('home');
-  const [selectedMember, setSelectedMember] = useState<string | null>(null);
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
-  const [savedItems, setSavedItems] = useState<Set<string>>(new Set());
+  const [currentPage, setCurrentPage] = useState<Page>("home");
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
 
-  const toggleSaveItem = (itemId: string) => {
-    setSavedItems(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(itemId)) {
-        newSet.delete(itemId);
-      } else {
-        newSet.add(itemId);
-      }
-      return newSet;
-    });
-  };
-
-  const navigateToMember = (memberId: string) => {
-    setSelectedMember(memberId);
-    setCurrentPage('member');
+  const navigateToHome = () => {
+    setCurrentPage("home");
+    setSelectedItemId(null);
   };
 
   const navigateToItem = (itemId: string) => {
-    setSelectedItem(itemId);
-    setCurrentPage('item');
-  };
-
-  const navigateToHome = () => {
-    setCurrentPage('home');
+    setSelectedItemId(itemId);
+    setCurrentPage("item");
   };
 
   const navigateToMyPage = () => {
-    setCurrentPage('mypage');
+    setCurrentPage("mypage");
+    setSelectedItemId(null);
   };
 
   return (
     <div className="min-h-screen bg-white">
-      <TopNav 
-        onHomeClick={navigateToHome}
-        onProfileClick={navigateToMyPage}
-      />
-      
+      <TopNav onHomeClick={navigateToHome} onProfileClick={navigateToMyPage} />
+
       <main className="pt-16">
-        {currentPage === 'home' && (
-          <Home 
-            onMemberClick={navigateToMember}
-            onItemClick={navigateToItem}
-            savedItems={savedItems}
-            onToggleSave={toggleSaveItem}
-          />
+        {currentPage === "home" && <Home />}
+
+        {currentPage === "item" && selectedItemId && (
+          <ItemDetail itemId={selectedItemId} />
         )}
-        {currentPage === 'member' && selectedMember && (
-          <MemberDetail 
-            memberId={selectedMember}
-            onItemClick={navigateToItem}
-            savedItems={savedItems}
-            onToggleSave={toggleSaveItem}
-          />
-        )}
-        {currentPage === 'item' && selectedItem && (
-          <ItemDetail 
-            itemId={selectedItem}
-            onItemClick={navigateToItem}
-            savedItems={savedItems}
-            onToggleSave={toggleSaveItem}
-          />
-        )}
-        {currentPage === 'mypage' && (
-          <MyPage 
-            savedItems={savedItems}
-            onItemClick={navigateToItem}
-            onToggleSave={toggleSaveItem}
-          />
-        )}
+
+        {currentPage === "mypage" && <MyPage />}
       </main>
     </div>
   );
