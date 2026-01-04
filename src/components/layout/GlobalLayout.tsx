@@ -3,28 +3,20 @@ import Header from "./Header";
 
 export function GlobalLayout() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white flex flex-col">
       <Header />
 
-      {/* Header 높이(h-16 = 64px) 만큼 padding-top */}
-      <main
-        className="
-          mx-auto
-          w-full
-          max-w-5xl
-          px-4
-          pt-20
-          pb-10
-          md:px-8
-          lg:px-10
-          md:border-x
-          md:border-gray-200
-        "
-      >
-        <Outlet />
+      <main className="pt-16 flex-1">
+        {/* 🔥 border는 이 레벨에서 */}
+        <div className="mx-auto h-full w-full max-w-4xl md:border-x md:border-gray-200">
+          {/* 실제 콘텐츠 */}
+          <div className="px-4 py-10 md:px-6 lg:px-10">
+            <Outlet />
+          </div>
+        </div>
       </main>
 
-      <footer className="border-t py-10 text-center text-gray-400">
+      <footer className="text-muted-foreground border-t py-10 text-center text-sm">
         © MOA
       </footer>
     </div>

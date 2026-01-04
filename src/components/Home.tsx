@@ -9,7 +9,6 @@ export function Home() {
   useEffect(() => {
     fetchOutfits()
       .then((data) => {
-        console.log("FETCHED OUTFITS:", data);
         setOutfits(data ?? []);
       })
       .finally(() => {
@@ -22,7 +21,7 @@ export function Home() {
   }
 
   return (
-    <div className="min-h-screen px-6 py-12 max-w-6xl mx-auto">
+    <div className="py-12">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {outfits.map((outfit) => (
           <ItemCard key={outfit.id} outfit={outfit} />

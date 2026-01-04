@@ -30,7 +30,7 @@ export default function Header() {
           flex
           h-full
           w-full
-          max-w-5xl
+          max-w-4xl
           items-center
           justify-between
           px-4

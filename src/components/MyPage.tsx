@@ -46,7 +46,7 @@ export function MyPage() {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen px-6 py-12 max-w-7xl mx-auto">
+    <div className="py-12">
       <h1 className="text-3xl font-semibold mb-8">My Page</h1>
 
       {likedOutfits.length === 0 ? (
