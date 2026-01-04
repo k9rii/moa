@@ -1,33 +1,38 @@
-// src/components/MyPage.tsx
 import { useEffect, useState } from "react";
-import { User } from "lucide-react";
 import { ItemCard } from "./ItemCard";
 import { supabase } from "../lib/supabase";
+import { useNavigate } from "react-router-dom";
 
 export function MyPage() {
   const [likedOutfits, setLikedOutfits] = useState<any[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchLikedOutfits() {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        navigate("/login", { replace: true });
+        return;
+      }
+
+      const user = session.user;
+
       const { data, error } = await supabase
         .from("likes")
         .select(
           `
-          outfit:outfits (
-            id,
-            image_url,
-            description,
-            celebrities ( name ),
-            outfit_items (
-              affiliate_products (
-                id,
-                affiliate_url
-              )
-            )
-          )
-        `
+        outfit:outfits (
+          id,
+          image_url,
+          description,
+          celebrities ( name )
         )
-        .eq("user_id", "test-user");
+      `
+        )
+        .eq("user_id", user.id);
 
       if (error) {
         console.error(error);
@@ -38,11 +43,11 @@ export function MyPage() {
     }
 
     fetchLikedOutfits();
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="min-h-screen px-6 py-12 max-w-7xl mx-auto">
-      <h1 className="text-4xl mb-8">My Page</h1>
+      <h1 className="text-3xl font-semibold mb-8">My Page</h1>
 
       {likedOutfits.length === 0 ? (
         <p className="text-gray-400">아직 저장한 아이템이 없습니다</p>

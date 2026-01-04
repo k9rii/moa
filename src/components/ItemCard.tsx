@@ -1,4 +1,3 @@
-// src/components/ItemCard.tsx
 import { Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
@@ -30,8 +29,12 @@ export function ItemCard({ outfit }: { outfit: any }) {
   }, [userId, outfit.id]);
 
   const toggleLike = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation(); // ✅ // 카드 클릭 방지
-    if (!userId) return alert("로그인이 필요합니다");
+    e.stopPropagation(); //카드 클릭 방지
+
+    if (!userId) {
+      navigate("/login");
+      return;
+    }
 
     if (liked) {
       await supabase
@@ -63,7 +66,7 @@ export function ItemCard({ outfit }: { outfit: any }) {
       {/* 하트 */}
       <button
         onClick={toggleLike}
-        className="absolute top-3 right-3 bg-white/90 p-2 rounded-full"
+        className="absolute top-3 right-3 z-10 bg-white/90 p-2 rounded-full"
       >
         <Heart
           className={`w-5 h-5 ${
