@@ -11,7 +11,8 @@ export async function fetchOutfits() {
       description,
       celebrities (
         id,
-        name
+        name,
+        group_name
       ),
       outfit_items (
         id,

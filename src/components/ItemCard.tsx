@@ -78,7 +78,12 @@ export function ItemCard({ outfit }: { outfit: any }) {
       {/* 연예인 이름 */}
       <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/60 to-transparent p-3">
         <div className="text-white text-sm font-medium">
-          {outfit.celebrities?.name}
+          <span>{outfit.celebrities?.name}</span>
+          {outfit.celebrities?.group_name && (
+            <span className="ml-1 text-white/70 text-xs">
+              · {outfit.celebrities.group_name}
+            </span>
+          )}
         </div>
       </div>
     </div>
