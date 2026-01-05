@@ -17,7 +17,7 @@ export function Home() {
   }, []);
 
   if (loading) {
-    return <div className="p-10">Loading...</div>;
+    return <div className="min-h-screen p-10">Loading...</div>;
   }
 
   return (
