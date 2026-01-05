@@ -15,11 +15,11 @@ export function Login() {
   return (
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
       <div className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-xl space-y-6">
-        <h1 className="text-2xl font-semibold text-center">로그인</h1>
+        <h1 className="text-2xl font-semibold text-center">Login</h1>
 
         <input
           className="w-full border p-3 rounded-lg"
-          placeholder="이메일"
+          placeholder="moa@gmail.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -27,7 +27,7 @@ export function Login() {
         <input
           className="w-full border p-3 rounded-lg"
           type="password"
-          placeholder="비밀번호"
+          placeholder="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -36,13 +36,13 @@ export function Login() {
           onClick={handleLogin}
           className="w-full bg-black text-white py-3 rounded-lg"
         >
-          로그인
+          Login
         </button>
 
         <p className="text-sm text-center text-gray-500">
-          아직 회원이 아니신가요?{" "}
+          Not a membet yet?{" "}
           <Link to="/signup" className="text-violet-500 font-medium">
-            회원가입
+            Sign Up
           </Link>
         </p>
       </div>

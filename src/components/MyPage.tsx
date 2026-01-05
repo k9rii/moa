@@ -46,11 +46,11 @@ export function MyPage() {
   }, [navigate]);
 
   return (
-    <div className="py-12">
+    <div className="min-h-screen py-12">
       <h1 className="text-3xl font-semibold mb-8">My Page</h1>
 
       {likedOutfits.length === 0 ? (
-        <p className="text-gray-400">아직 저장한 아이템이 없습니다</p>
+        <p className="text-gray-400">You have no saved items yet.</p>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
           {likedOutfits.map((outfit) => (
