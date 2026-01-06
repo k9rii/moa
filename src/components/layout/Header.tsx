@@ -1,5 +1,5 @@
-import { User } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { User, Search } from "lucide-react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { AVATAR_IMAGE } from "@/lib/storage";
@@ -8,6 +8,10 @@ export default function Header() {
   const navigate = useNavigate();
   const [userId, setUserId] = useState<string | null>(null);
   const [avatarPath, setAvatarPath] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const location = useLocation();
+
+  const scope = location.pathname.startsWith("/mypage") ? "mine" : "all";
 
   const refreshProfile = async () => {
     const { data } = await supabase.auth.getUser();
@@ -39,12 +43,32 @@ export default function Header() {
     navigate(userId ? "/mypage" : "/login");
   };
 
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchQuery.trim()) {
+      navigate(
+        `/search?q=${encodeURIComponent(searchQuery.trim())}&scope=${scope}`
+      );
+    }
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 h-16 border-b bg-white/80 backdrop-blur-md">
       <div className="mx-auto flex h-full max-w-4xl items-center justify-between px-4 md:px-8">
         <Link to="/" className="text-xl font-semibold">
           MOA
         </Link>
+
+        <div className="mx-4 flex flex-1 max-w-md items-center rounded-full border bg-white px-3 py-1.5 shadow-sm">
+          <Search className="mr-2 h-4 w-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search outfits, styles, or celebrities"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleSearchKeyDown}
+            className="w-full bg-transparent text-sm outline-none placeholder:text-gray-400"
+          />
+        </div>
 
         <button
           onClick={handleProfileClick}
