@@ -5,6 +5,7 @@ import { MyPage } from "./components/MyPage";
 import { Login } from "./components/auth/Login";
 import { Signup } from "./components/auth/Signup";
 import { GlobalLayout } from "./components/layout/GlobalLayout";
+import { Search } from "./components/Search";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/search" element={<Search />} />
       </Route>
     </Routes>
   );
