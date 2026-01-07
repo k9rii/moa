@@ -152,7 +152,8 @@ export function MyPage() {
         {likedOutfits.length === 0 ? (
           <p className="text-gray-400">You have no saved items yet.</p>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {" "}
             {likedOutfits.map((outfit) => (
               <ItemCard key={outfit.id} outfit={outfit} />
             ))}
@@ -162,3 +163,4 @@ export function MyPage() {
     </div>
   );
 }
+//커밋
