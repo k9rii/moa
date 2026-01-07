@@ -22,7 +22,8 @@ export function Home() {
 
   return (
     <div className="min-h-screen py-12">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-3 gap-8">
+        {" "}
         {outfits.map((outfit) => (
           <ItemCard key={outfit.id} outfit={outfit} />
         ))}
