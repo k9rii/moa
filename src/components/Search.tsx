@@ -171,7 +171,8 @@ export function Search() {
         <p className="mt-4 text-sm text-gray-400">No results found.</p>
       )}
 
-      <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3">
+      <div className="mt-6 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {" "}
         {results.map((outfit) => (
           <div
             key={outfit.id}
