@@ -6,10 +6,11 @@ export async function fetchOutfits() {
     .select(
       `
       id,
+      created_at,
       image_url,
       instagram_post_url,
       description,
-      celebrities (
+      celebrities:celebrity_id (
         id,
         name,
         group_name
