@@ -70,6 +70,7 @@ export function ItemDetail() {
           <h1 className="text-3xl font-semibold">{outfit.description}</h1>
 
           <h2 className="text-lg font-semibold">Similar items on ABLY</h2>
+
           <div className="space-y-3">
             {outfit.outfit_items?.[0]?.affiliate_products?.map((p: any) => (
               <a
@@ -77,12 +78,12 @@ export function ItemDetail() {
                 href={p.affiliate_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between px-6 py-4 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition"
+                className="flex items-center justify-between gap-4 px-6 py-4 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition"
               >
-                <span className="text-sm font-medium text-gray-800 line-clamp-2">
+                <span className="flex-1 text-sm font-medium text-gray-800 line-clamp-2">
                   {p.product_name}
                 </span>
-                <ExternalLink className="w-4 h-4" />
+                <ExternalLink className="w-4 h-4 flex-shrink-0" />
               </a>
             ))}
           </div>
@@ -104,7 +105,17 @@ export function ItemDetail() {
           </a>
         </div>
       </div>
-      <div className="mt-24 border-t pt-12">
+
+      <p className="text-sm text-gray-500 leading-snug py-2">
+        <span className="block">
+          Some items do not support international shipping.
+        </span>
+        <span className="block whitespace-nowrap">
+          In this case, you can place an order through a purchasing agent
+          service.
+        </span>
+      </p>
+      <div className="mt-2 border-t pt-2">
         <h2 className="text-xl font-semibold mb-6">
           Similar celebrity outfits
         </h2>
