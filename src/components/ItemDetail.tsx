@@ -1,55 +1,84 @@
 import { Heart, ExternalLink } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // navigate 추가
 
 export function ItemDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [outfit, setOutfit] = useState<any>(null);
+  const [recommendations, setRecommendations] = useState<any[]>([]); // 추천 목록 상태
 
   useEffect(() => {
     if (!id) return;
 
-    // ✅ Supabase 쿼리에 AI 분석 필드(sub_category, material, color, pattern) 추가
-    supabase
-      .from("outfits")
-      .select(
-        `
-        id,
-        image_url,
-        description,
-        instagram_post_url,
-        celebrities ( name, group_name ),
-        outfit_items (
+    // 초기화 및 상단 이동
+    setOutfit(null);
+    setRecommendations([]);
+    window.scrollTo(0, 0);
+
+    async function fetchDetailAndRecs() {
+      // 1. 현재 아이템 상세 정보
+      const { data: outfitData } = await supabase
+        .from("outfits")
+        .select(
+          `
           id,
-          sub_category,
-          material,
-          color,
-          pattern,
-          affiliate_products (
-            id,
-            product_name,
-            affiliate_url
+          image_url,
+          description,
+          instagram_post_url,
+          celebrities ( name, group_name ),
+          outfit_items (
+            id, sub_category, material, color, pattern, embedding, 
+            affiliate_products ( id, product_name, affiliate_url )
           )
+        `
         )
-      `
-      )
-      .eq("id", id)
-      .single()
-      .then(({ data }) => setOutfit(data));
+        .eq("id", id)
+        .single();
+
+      if (outfitData) {
+        setOutfit(outfitData);
+
+        // 2. 유사 게시물 추천 호출
+        let currentEmbedding = outfitData.outfit_items?.[0]?.embedding;
+        if (typeof currentEmbedding === "string") {
+          try {
+            currentEmbedding = JSON.parse(currentEmbedding);
+          } catch (e) {
+            // ignore JSON parse error
+          }
+        }
+
+        if (currentEmbedding) {
+          const { data: recData } = await supabase.rpc("match_outfits", {
+            query_embedding: currentEmbedding,
+            match_threshold: 0.4,
+            current_outfit_id: id,
+          });
+          setRecommendations(recData || []);
+        }
+      }
+    }
+    fetchDetailAndRecs();
   }, [id]);
 
-  if (!outfit) return null;
+  if (!outfit)
+    return (
+      <div className="pt-40 text-center text-gray-400">
+        Loading MOA Style...
+      </div>
+    );
 
   return (
-    <div className="pt-20 pb-24 px-6">
+    <div className="pt-20 pb-24 px-6" key={id}>
       <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-start">
         {/* ✅ 이미지 영역 */}
         <div className="w-full">
           <img
             src={outfit.image_url}
             alt=""
-            className="w-full max-h-[520px] md:max-h-[640px] object-cover rounded-2xl"
+            className="w-full max-h-[520px] md:max-h-[640px] object-cover rounded-2xl shadow-sm"
           />
         </div>
 
@@ -70,24 +99,18 @@ export function ItemDetail() {
             <h1 className="text-3xl font-semibold mb-3">
               {outfit.description}
             </h1>
-
-            {/* 🏷️ AI 분석 태그 섹션 (나시, 오프숄더, 프릴, 플리스 등 반영) */}
             <div className="flex flex-wrap gap-2 mt-4">
               {outfit.outfit_items?.[0] && (
                 <>
-                  {/* 카테고리 태그 (Sleeveless Top, Off-shoulder Top 등) */}
                   <span className="px-3 py-1 bg-gray-100 text-gray-700 text-[11px] font-bold rounded-full border border-gray-200 uppercase tracking-wider">
                     #{outfit.outfit_items[0].sub_category}
                   </span>
-                  {/* 소재 태그 (Frill, Fleece, Denim 등) */}
                   <span className="px-3 py-1 bg-blue-50 text-blue-700 text-[11px] font-bold rounded-full border border-blue-100 uppercase tracking-wider">
                     #{outfit.outfit_items[0].material}
                   </span>
-                  {/* 색상 태그 */}
                   <span className="px-3 py-1 bg-purple-50 text-purple-700 text-[11px] font-bold rounded-full border border-purple-100 uppercase tracking-wider">
                     #{outfit.outfit_items[0].color}
                   </span>
-                  {/* 패턴 태그 (Solid가 아닐 때만 노출) */}
                   {outfit.outfit_items[0].pattern !== "solid" && (
                     <span className="px-3 py-1 bg-green-50 text-green-700 text-[11px] font-bold rounded-full border border-green-100 uppercase tracking-wider">
                       #{outfit.outfit_items[0].pattern}
@@ -139,7 +162,7 @@ export function ItemDetail() {
         </div>
       </div>
 
-      {/* ✅ Shipping notice & international forwarding services */}
+      {/* 배송 대행 업체 정보 */}
       <div className="max-w-5xl mx-auto mt-8 text-sm text-gray-400 leading-snug italic">
         <p>
           Some items do not support international shipping. In this case, you
@@ -196,12 +219,47 @@ export function ItemDetail() {
         </p>
       </div>
 
-      {/* ✅ 하단 추천 섹션 */}
-      <div className="max-w-5xl mx-auto mt-12 border-t pt-8">
-        <h2 className="text-xl font-semibold mb-6">
+      {/* 유사 게시물 추천 */}
+      <div className="max-w-5xl mx-auto mt-12 border-t pt-12">
+        <h2 className="text-xl font-semibold mb-8">
           Similar celebrity outfits
         </h2>
-        <div className="text-gray-400 text-sm">(Coming soon)</div>
+        {recommendations.length > 0 ? (
+          <div className="grid grid-cols-3 gap-6">
+            {recommendations.map((item) => (
+              <div
+                key={item.res_id}
+                className="group cursor-pointer"
+                onClick={() => navigate(`/outfit/${item.res_id}`)}
+              >
+                <div className="aspect-[3/4] overflow-hidden rounded-2xl bg-gray-100 border border-gray-100">
+                  <img
+                    src={item.res_image_url}
+                    alt={item.res_celebrity_name}
+                    className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+                  />
+                </div>
+                <div className="mt-4">
+                  <p className="text-sm font-bold text-gray-900">
+                    {item.res_celebrity_name}
+                  </p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-[10px] px-2 py-0.5 bg-gray-100 rounded text-gray-500 font-medium">
+                      {item.res_sub_category}
+                    </span>
+                    <span className="text-[10px] text-blue-500 font-bold">
+                      {Math.round(item.res_total_score * 100)}% match
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="py-12 text-center text-gray-400 text-sm">
+            No similar outfits found yet.
+          </div>
+        )}
       </div>
     </div>
   );
