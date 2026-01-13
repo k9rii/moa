@@ -65,8 +65,10 @@ export function ItemDetail() {
 
   if (!outfit)
     return (
-      <div className="pt-40 text-center text-gray-400">
-        Loading MOA Style...
+      <div className="pt-20 pb-24 px-6">
+        <div className="max-w-5xl mx-auto py-24 text-center text-gray-400">
+          Loading MOA Style...
+        </div>
       </div>
     );
 
@@ -162,61 +164,64 @@ export function ItemDetail() {
         </div>
       </div>
 
-      {/* 배송 대행 업체 정보 */}
-      <div className="max-w-5xl mx-auto mt-8 text-sm text-gray-400 leading-snug italic">
-        <p>
-          Some items do not support international shipping. In this case, you
-          can place an order through a purchasing agent or use an international
-          parcel forwarding service:
-        </p>
+      {/* Purchase & Shipping Guide */}
+      <div className="max-w-5xl mx-auto mt-10 border-t pt-8 text-sm text-gray-600 leading-relaxed">
+        <div className="grid md:grid-cols-2 gap-8">
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3">
+              🛍️ Two Ways to Purchase
+            </h3>
+            <ul className="space-y-3">
+              <li>
+                <span className="font-medium text-gray-900">
+                  Buy directly on ABLY
+                </span>
+                <span className="block text-gray-500">Korea-only shipping</span>
+              </li>
+              <li>
+                <span className="font-medium text-gray-900">
+                  Use our international resale service
+                </span>
+                <span className="block text-gray-500">
+                  We purchase &amp; resell on your behalf
+                </span>
+              </li>
+            </ul>
+          </div>
 
-        <ul className="list-disc list-inside mt-2 space-y-1 not-italic">
-          <li>
-            <a
-              href="https://post.malltail.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-500 hover:text-gray-700 hover:underline transition-colors"
-            >
-              Malltail — international shopping & parcel forwarding
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://www.worldexpress.link/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-500 hover:text-gray-700 hover:underline transition-colors"
-            >
-              WorldExpress — global parcel forwarding service
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://www.delivered.co.kr/en"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-500 hover:text-gray-700 hover:underline transition-colors"
-            >
-              Delivered Korea — international purchasing & shipping
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://forward2me.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-500 hover:text-gray-700 hover:underline transition-colors"
-            >
-              Forward2me — worldwide package forwarding
-            </a>
-          </li>
-        </ul>
-
-        <p className="mt-2">
-          Availability, fees, and supported countries vary by provider. Please
-          check each service for details before ordering.
-        </p>
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3">
+              📦 How It Works
+            </h3>
+            <ol className="list-decimal list-inside space-y-2">
+              <li>
+                Submit a purchase request via the{" "}
+                <a
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSdHfqtwptswTXFzH4C4oZf_bdZIYIm0XhuK6ie47TNWPdRd6A/viewform?usp=header"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-gray-800 underline underline-offset-2 hover:text-pink-600 transition"
+                >
+                  form
+                </a>
+              </li>
+              <li>
+                We’ll confirm availability and the total price via{" "}
+                <a
+                  href="https://www.instagram.com/moa__you"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-gray-800 underline underline-offset-2 hover:text-pink-600 transition"
+                >
+                  Instagram DM (@moa__you)
+                </a>
+              </li>
+              <li>Complete the payment</li>
+              <li>Fill out the shipping information form</li>
+              <li>Your item will be shipped internationally with tracking</li>
+            </ol>
+          </div>
+        </div>
       </div>
 
       {/* 유사 게시물 추천 */}
