@@ -17,7 +17,14 @@ export function GlobalLayout() {
       </main>
 
       <footer className="text-muted-foreground border-t py-10 text-center text-sm">
-        © MOA
+        <a
+          href="https://www.instagram.com/moa__you"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-pink-600 transition underline underline-offset-2"
+        >
+          @moa__you
+        </a>
       </footer>
     </div>
   );
