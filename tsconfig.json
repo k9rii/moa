@@ -7,6 +7,9 @@
 
   /* 템플릿 코드에 추가된 부분 : Path Alias */
   "compilerOptions": {
+    "jsx": "react-jsx",
+    "types": ["react", "react-dom"],
+    "lib": ["DOM", "DOM.Iterable", "ES2020"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
